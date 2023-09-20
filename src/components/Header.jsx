@@ -4,8 +4,8 @@ const Header = () => {
   return (
     <div className="px-[3rem] shadow-md">
       <nav className="h-[8vh] py-[2rem] flex justify-between items-center">
-        <Link to='/'>
-          <h1>ImageFlowHub</h1>
+        <Link to="/">
+          <h1 className="font-bold text-xl">ImageFlowHub.</h1>
         </Link>
         <ul className="flex gap-4">
           <Link to="signIn">
