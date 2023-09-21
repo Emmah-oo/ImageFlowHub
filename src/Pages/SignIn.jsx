@@ -1,29 +1,10 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import AppContext from "../Context/AppContext";
+
 const SignIn = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [error, setError] = useState("");
-
-  const onLogin = async (e) => {
-    e.preventDefault();
-
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        navigate("/");
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
-  };
+  const { email, setEmail, password, setPassword, onLogin } =
+    useContext(AppContext);
 
   return (
     <div className="min-h-[80vh] w-[100%]">
