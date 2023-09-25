@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 const AppContext = createContext();
 
 // eslint-disable-next-line react/prop-types
-export function AppProvider ({ children }) {
+export function AppProvider({ children }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -25,20 +26,28 @@ export function AppProvider ({ children }) {
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
         setUser(false);
+        if (errorCode === "auth/invalid-email") {
+          setErrorMessage("Invalid email address");
+        } else if (errorCode === "auth/missing-password") {
+          setErrorMessage("Password required");
+        } else if (errorCode === "auth/invalid-login-credentials") {
+          setErrorMessage("Invalid login credentials");
+        } else {
+          setErrorMessage("An error occurred");
+        }
       });
   };
   return (
     <AppContext.Provider
       value={{
-       email,
-       setEmail,
-       password,
-       setPassword,
-       onLogin,
-       user
+        email,
+        setEmail,
+        password,
+        setPassword,
+        onLogin,
+        user,
+        errorMessage,
       }}
     >
       {children}

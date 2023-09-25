@@ -9,7 +9,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,8 +23,15 @@ const SignUp = () => {
       .catch((error) => {
         // An error happened.
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        if (errorCode === "auth/invalid-email") {
+          setErrorMessage("Invalid email");
+        } else if (errorCode === "auth/weak-password") {
+          setErrorMessage("Password should be at least 6 characters");
+        } else if (errorCode === "auth/email-already-in-use") {
+          setErrorMessage("Email already in use");
+        } else {
+          setErrorMessage("An error has occurred");
+        }
       });
   };
   return (
@@ -36,6 +43,7 @@ const SignUp = () => {
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
           className="border px-4 py-3 w-[80%] outline-none rounded-md"
+          required
         />
         <input
           type="text"
@@ -43,6 +51,7 @@ const SignUp = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           className="border px-4 py-3 w-[80%] outline-none rounded-md"
+          required
         />
         <input
           type="password"
@@ -50,7 +59,11 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Create Password"
           className="border px-4 py-3 w-[80%] outline-none rounded-md"
+          required
         />
+        <div>
+          <h1 className="text-xl text-red-600">{errorMessage}</h1>
+        </div>
         <button
           type="submit"
           className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-md transition-all border w-[70%]"
