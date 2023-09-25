@@ -6,12 +6,21 @@ import { auth } from "../firebase/firebase";
 const Header = () => {
   const [user, setUser] = useState(false);
 
+  useEffect(() => {
+    const loggedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (loggedUser) {
+      setUser(loggedUser);
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   const logOut = () => {
     signOut(auth)
       .then(() => {
         navigate("/signIn");
+        setUser(false);
         console.log("Signed out successfully");
       })
       .catch((error) => {
